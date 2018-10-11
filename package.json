@@ -6,8 +6,7 @@
     "start": "cgb-scripts start",
     "build": "cgb-scripts build",
     "eject": "cgb-scripts eject",
-    "fixjs": "npx prettier --write src/**/*.js && npx eslint --fix src/**/*.js",
-    "precommit": "npx lint-staged"
+    "fixjs": "npx prettier --write src/**/*.js && npx eslint --fix src/**/*.js"
   },
   "lint-staged": {
     "src/**/*.js": [
@@ -24,5 +23,10 @@
     "husky": "1.1.2",
     "lint-staged": "7.3.0",
     "prettier": "1.14.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx lint-staged"
+    }
   }
 }
