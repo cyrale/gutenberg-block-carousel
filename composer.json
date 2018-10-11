@@ -1,0 +1,37 @@
+{
+  "name": "cyrale/gutenberg-block-carousel",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "wordpress",
+    "wordpress-plugin",
+    "gutenberg"
+  ],
+  "homepage": "https://github.com/cyrale/gutenberg-block-carousel",
+  "license": "GPL+2.0",
+  "authors": [
+    {
+      "name": "Cyrale",
+      "email": "cyril@jacquesson.me"
+    }
+  ],
+  "support"    : {
+    "issues": "https://github.com/cyrale/gutenberg-block-carousel/issues",
+    "source": "https://github.com/cyrale/gutenberg-block-carousel"
+  },
+  "type": "wordpress-plugin",
+  "autoload": {
+    "classmap": [
+      "plugin.php",
+      "src/"
+    ]
+  },
+  "require": {
+    "yahnis-elsts/plugin-update-checker": "^4.4"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.3",
+    "wp-coding-standards/wpcs": "^1.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+  }
+}

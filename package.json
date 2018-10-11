@@ -1,0 +1,28 @@
+{
+  "name": "gutenberg-block-carousel",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cgb-scripts start",
+    "build": "cgb-scripts build",
+    "eject": "cgb-scripts eject",
+    "fixjs": "npx prettier --write src/**/*.js && npx eslint --fix src/**/*.js",
+    "precommit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "cgb-scripts": "1.11.0",
+    "classnames": "2.2.6",
+    "eslint": "5.6.1",
+    "husky": "1.1.2",
+    "lint-staged": "7.3.0",
+    "prettier": "1.14.3"
+  }
+}
