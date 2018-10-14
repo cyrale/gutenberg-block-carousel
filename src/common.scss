@@ -5,9 +5,37 @@
  * that are used across the project.
 */
 
+$default-font-size: 16px;
+$break-small: 600px;
+$content-width: 610px;
+$border-width: 1px;
+
 // Colors.
-$black: rgb(41, 41, 41);
-$white: #f4f4f4;
-$gray: #dedede;
-$green: #bada55;
-$red: orangered;
+$white: #fff;
+$black: #000;
+$dark-gray-500: #555d66;
+$blue: #0073aa;
+
+// Mixins.
+@mixin break-small() {
+  @media (min-width: #{ ($break-small) }) {
+	@content;
+  }
+}
+
+@mixin loading_fade {
+  animation: loading_fade 1.6s ease-in-out infinite;
+}
+
+// Animations.
+@keyframes loading_fade {
+  0% {
+	opacity: 0.5;
+  }
+  50% {
+	opacity: 1;
+  }
+  100% {
+	opacity: 0.5;
+  }
+}

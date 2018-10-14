@@ -63,3 +63,48 @@ function gutenberg_block_carousel_editor_assets() {
 
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'gutenberg_block_carousel_editor_assets' );
+
+/**
+ * Define image sizes.
+ */
+function gutenberg_block_carousel_define_image_sizes() {
+	$crop_images = apply_filters( 'gutenberg_block_carousel_crop_images', true );
+	$image_sizes = apply_filters( 'gutenberg_block_carousel_image_sizes', [
+		'thumbnail' => [
+			'width'  => 640,
+			'height' => 480,
+			'crop'   => $crop_images,
+		],
+	] );
+
+	foreach ($image_sizes as $name => $size ) {
+		add_image_size( "block-carousel-{$name}", $size['width'], $size['height'], $size['crop'] );
+	}
+}
+
+// Hook: After setup theme.
+add_action( 'after_setup_theme', 'gutenberg_block_carousel_define_image_sizes' );
+
+/**
+ * Allow to save specific HTML attributes.
+ *
+ * @param array        $allowed Allowed HTML attributes.
+ * @param array|string $context Context to judge allowed tags by.
+ *
+ * @return array New allowed HTML attributes
+ */
+function gutenberg_block_carousel_kses_allowed_html( $allowed, $context ) {
+	if ( is_array( $context ) ) {
+		return $allowed;
+	}
+
+	if ( $context === 'post' ) {
+		$allowed['img']['data-src'] = true;
+		$allowed['img']['data-lightbox-src'] = true;
+	}
+
+	return $allowed;
+}
+
+// Hook: Allow HTML.
+add_filter( 'wp_kses_allowed_html', 'gutenberg_block_carousel_kses_allowed_html', 20, 2 );

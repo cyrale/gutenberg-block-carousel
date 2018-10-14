@@ -11,8 +11,11 @@ import './editor.scss';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { RichText } = wp.editor;
 
-export const name = 'gutenberg-block/container';
+import edit from './block-edit';
+
+export const name = 'gutenberg-block/carousel';
 
 /**
  * Register: aa Gutenberg Block.
@@ -45,6 +48,67 @@ registerBlockType( name, {
 		html: false,
 	},
 
+	attributes: {
+		images: {
+			type: 'array',
+			default: [],
+			source: 'query',
+			selector: '.wp-block-gutenberg-block-carousel ul.carousel .carousel__item',
+			query: {
+				url: {
+					source: 'attribute',
+					selector: 'img',
+					attribute: 'data-src',
+				},
+				alt: {
+					source: 'attribute',
+					selector: 'img',
+					attribute: 'alt',
+					default: '',
+				},
+				id: {
+					source: 'attribute',
+					selector: 'img',
+					attribute: 'data-id',
+				},
+				lightbox: {
+					source: 'attribute',
+					selector: 'img',
+					attribute: 'data-lightbox-src',
+				},
+				caption: {
+					source: 'html',
+					selector: 'figcaption',
+				},
+			},
+		},
+		items: {
+			type: 'number',
+		},
+		thumbnailSize: {
+			type: 'string',
+			default: 'block-carousel-thumbnail',
+		},
+		lightboxSize: {
+			type: 'string',
+			default: 'full',
+		},
+		align: {
+			type: 'string',
+		},
+	},
+
+	getEditWrapperProps( attributes ) {
+		const { align } = attributes;
+		const props = {};
+
+		if ( 'full' === align || 'wide' === align ) {
+			props[ 'data-align' ] = align;
+		}
+
+		return props;
+	},
+
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
 	 * This represents what the editor will render when the block is used.
@@ -57,24 +121,7 @@ registerBlockType( name, {
 	 *
 	 * @return {Component} Rendered component.
 	 */
-	edit: props => {
-		// Creates a <p class='wp-block-cgb-block-gutenberg-block-carousel'></p>.
-		return (
-			<div className={ props.className }>
-				<p>— Hello from the backend.</p>
-				<p>
-					CGB BLOCK: <code>gutenberg-block-carousel</code> is a new Gutenberg block
-				</p>
-				<p>
-					It was created via{ ' ' }
-					<code>
-						<a href="https://github.com/ahmadawais/create-guten-block">create-guten-block</a>
-					</code>
-					.
-				</p>
-			</div>
-		);
-	},
+	edit,
 
 	/**
 	 * The save function defines the way in which the different attributes should be combined
@@ -88,20 +135,28 @@ registerBlockType( name, {
 	 *
 	 * @return {Component} Rendered component.
 	 */
-	save: () => {
+	save: ( { attributes: { images, align } } ) => {
 		return (
-			<div>
-				<p>— Hello from the frontend.</p>
-				<p>
-					CGB BLOCK: <code>gutenberg-block-carousel</code> is a new Gutenberg block.
-				</p>
-				<p>
-					It was created via{ ' ' }
-					<code>
-						<a href="https://github.com/ahmadawais/create-guten-block">create-guten-block</a>
-					</code>
-					.
-				</p>
+			<div className="carousel-container" data-align={ align }>
+				<ul className="carousel">
+					{ images.map( image => (
+						<li className="carousel__item" key={ image.id || image.url }>
+							<figure>
+								<img
+									className="carousel__image"
+									alt={ image.alt }
+									data-id={ image.id }
+									data-src={ image.url }
+									data-lightbox-src={ image.lightbox }
+								/>
+								{ image.caption &&
+									image.caption.length > 0 && (
+									<RichText.Content tagName="figcaption" value={ image.caption } />
+								) }
+							</figure>
+						</li>
+					) ) }
+				</ul>
 			</div>
 		);
 	},
