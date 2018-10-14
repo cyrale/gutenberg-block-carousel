@@ -188,13 +188,17 @@ add_filter( 'wp_kses_allowed_html', 'gutenberg_block_carousel_kses_allowed_html'
 function gutenberg_block_carousel_default_settings() {
 	$default_settings = [
 		'global' => [
+			'animateOut'      => '',
+			'animateIn'       => '',
 			'autoplay'        => true,
 			'autoplayTimeout' => 5000,
 			'loop'            => true,
 			'nav'             => true,
 			'dots'            => true,
 			'pagination'      => true,
-			'lightbox'        => true,
+			'caption'         => false,
+			'lightbox'        => false,
+			'lightboxCaption' => false,
 		],
 		'small'  => [
 			'width'   => 0,
