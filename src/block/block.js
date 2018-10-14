@@ -82,6 +82,9 @@ registerBlockType( name, {
 				},
 			},
 		},
+		settings: {
+			type: 'object',
+		},
 		items: {
 			type: 'number',
 		},
@@ -138,7 +141,7 @@ registerBlockType( name, {
 	save: ( { attributes: { images, align } } ) => {
 		return (
 			<div className="carousel-container" data-align={ align }>
-				<div className="carousel owl-carousel">
+				<div className="carousel owl-carousel owl-theme">
 					{ images.map( image => (
 						<div className="carousel__item" key={ image.id || image.url }>
 							<figure>

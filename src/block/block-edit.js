@@ -39,6 +39,10 @@ export function defaultItemsNumber( attributes ) {
 	return Math.min( 3, attributes.images.length );
 }
 
+export function defaultSettings( attributes ) {
+	return attributes.settings || window.gutenbergBlockCarouselDefaultSettings;
+}
+
 class BlockEdit extends Component {
 	constructor( props ) {
 		super( ...arguments );
@@ -214,7 +218,14 @@ class BlockEdit extends Component {
 
 	render() {
 		const { attributes, className, isSelected, setAttributes, noticeOperations, noticeUI } = this.props;
-		const { images, items = defaultItemsNumber( attributes ), thumbnailSize, lightboxSize, align } = attributes;
+		const {
+			images,
+			items = defaultItemsNumber( attributes ),
+			thumbnailSize,
+			lightboxSize,
+			align,
+			// settings = defaultSettings( attributes ),
+		} = attributes;
 		const availableSizes = this.getAvailableSizes();
 
 		const inspector = (
@@ -313,7 +324,7 @@ class BlockEdit extends Component {
 				{ noticeUI }
 				<div className={ `${ className } carousel-container` } data-align={ align }>
 					{ ! isSelected && (
-						<div className="carousel owl-carousel">
+						<div className="carousel owl-carousel owl-theme">
 							{ images.map( image => (
 								<div className="carousel__item" key={ image.id || image.url }>
 									<figure>

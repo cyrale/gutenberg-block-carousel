@@ -12,7 +12,10 @@
     "src/**/*.js": [
       "prettier --write",
       "eslint --fix",
-      "npm run build",
+      "git add"
+    ],
+    "dist/app.js": [
+      "npx uglifyjs --compress --mangle --output dist/app.min.js --",
       "git add"
     ]
   },

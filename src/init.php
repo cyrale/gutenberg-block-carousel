@@ -55,9 +55,16 @@ function gutenberg_block_carousel_block_assets() {
 	);
 
 	wp_enqueue_style(
+		'animate.css',
+		'https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css',
+		[],
+		'3.5.2'
+	);
+
+	wp_enqueue_style(
 		'gutenberg-block-carousel-style-css', // Handle.
 		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ), // Block style CSS.
-		[ 'wp-blocks', 'owl.carousel' ], // Dependency to include the CSS after it.
+		[ 'wp-blocks', 'owl.carousel', 'owl.theme.default', 'animate.css' ], // Dependency to include the CSS after it.
 		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) ), 0, 8 )
 	);
 }
@@ -90,6 +97,11 @@ function gutenberg_block_carousel_editor_assets() {
 		[ 'wp-blocks', 'wp-i18n', 'wp-element' ], // Dependencies, defined above.
 		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ) ), 0, 8 ),
 		true // Enqueue the script in the footer.
+	);
+	wp_localize_script(
+		'gutenberg-block-carousel-block-js',
+		'gutenbergBlockCarouselDefaultSettings',
+		gutenberg_block_carousel_default_settings()
 	);
 
 	// Styles.
@@ -127,15 +139,18 @@ add_filter( 'gutenberg_basics_default_blocks', 'gutenberg_block_carousel_default
  */
 function gutenberg_block_carousel_define_image_sizes() {
 	$crop_images = apply_filters( 'gutenberg_block_carousel_crop_images', true );
-	$image_sizes = apply_filters( 'gutenberg_block_carousel_image_sizes', [
-		'thumbnail' => [
-			'width'  => 640,
-			'height' => 480,
-			'crop'   => $crop_images,
-		],
-	] );
+	$image_sizes = apply_filters(
+		'gutenberg_block_carousel_image_sizes',
+		[
+			'thumbnail' => [
+				'width'  => 640,
+				'height' => 480,
+				'crop'   => $crop_images,
+			],
+		]
+	);
 
-	foreach ($image_sizes as $name => $size ) {
+	foreach ( $image_sizes as $name => $size ) {
 		add_image_size( "block-carousel-{$name}", $size['width'], $size['height'], $size['crop'] );
 	}
 }
@@ -156,8 +171,8 @@ function gutenberg_block_carousel_kses_allowed_html( $allowed, $context ) {
 		return $allowed;
 	}
 
-	if ( $context === 'post' ) {
-		$allowed['img']['data-src'] = true;
+	if ( 'post' === $context ) {
+		$allowed['img']['data-src']          = true;
 		$allowed['img']['data-lightbox-src'] = true;
 	}
 
@@ -166,3 +181,43 @@ function gutenberg_block_carousel_kses_allowed_html( $allowed, $context ) {
 
 // Hook: Allow HTML.
 add_filter( 'wp_kses_allowed_html', 'gutenberg_block_carousel_kses_allowed_html', 20, 2 );
+
+/**
+ * Get default settings for each carousel.
+ */
+function gutenberg_block_carousel_default_settings() {
+	$default_settings = [
+		'global' => [
+			'speed'           => 5000,
+			'autoplay'        => true,
+			'autoplayTimeout' => 5000,
+			'loop'            => true,
+			'nav'             => true,
+			'dots'            => true,
+			'pagination'      => true,
+			'lightbox'        => true,
+		],
+		'small'  => [
+			'width'   => 0,
+			'items'   => 2,
+			'slideBy' => 2,
+		],
+		'medium' => [
+			'width'   => 640,
+			'items'   => 3,
+			'slideBy' => 3,
+		],
+		'large'  => [
+			'width'   => 1024,
+			'items'   => 3,
+			'slideBy' => 3,
+		],
+		'xlarge' => [
+			'width'   => 1200,
+			'items'   => 4,
+			'slideBy' => 4,
+		],
+	];
+
+	return apply_filters( 'gutenberg_block_carousel_default_settings', $default_settings );
+}

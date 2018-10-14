@@ -4,6 +4,7 @@
 			var $carousel = $( carousel );
 
 			$carousel.owlCarousel( {
+				nav: true,
 				items: 1,
 				lazyLoad: true,
 			} );

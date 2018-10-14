@@ -11,6 +11,7 @@
   #{$carousel} {
 	&--editor {
 	  display: flex;
+	  margin: 0 -8px;
 	  flex-wrap: wrap;
 
 	  @include break-small {
@@ -22,6 +23,8 @@
 	  }
 
 	  #{$carousel}__item {
+		margin: 8px;
+
 		&__inline-menu {
 		  padding: 2px;
 		  position: absolute;
