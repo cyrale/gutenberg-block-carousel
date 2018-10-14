@@ -57,6 +57,7 @@ class BlockEdit extends Component {
 			selectedImage: null,
 			thumbnailSize: props.thumbnailSize,
 			lightboxSize: props.lightboxSize,
+			carouselInitialized: false,
 		};
 	}
 
@@ -189,15 +190,25 @@ class BlockEdit extends Component {
 			} );
 		}
 
+		// Deselect images when deselecting the block
 		if ( ! isSelected && prevProps.isSelected ) {
-			// Deselect images when deselecting the block
 			this.setState( {
 				selectedImage: null,
 				captionSelected: false,
 			} );
+		}
 
-			// TODO: Initialize own.Carousel
-			// console.log(window.jQuery);
+		// Initialize own.Carousel
+		if ( ( ! isSelected && prevProps.isSelected ) || ! this.state.carouselInitialized ) {
+			window.jQuery( '.wp-block-gutenberg-block-carousel .carousel:not(.carousel--editor)' ).each( ( index, item ) => {
+				window.jQuery( item ).owlCarousel( {
+					items: 1,
+				} );
+			} );
+
+			this.setState( {
+				carouselInitialized: true,
+			} );
 		}
 	}
 
@@ -247,7 +258,7 @@ class BlockEdit extends Component {
 		const controls = (
 			<BlockControls>
 				<BlockAlignmentToolbar
-					controls={ [ 'full', 'wide' ] }
+					controls={ [ 'wide', 'full' ] }
 					value={ align }
 					onChange={ newAlign => setAttributes( { align: newAlign } ) }
 				/>
@@ -302,9 +313,9 @@ class BlockEdit extends Component {
 				{ noticeUI }
 				<div className={ `${ className } carousel-container` } data-align={ align }>
 					{ ! isSelected && (
-						<ul className="carousel">
+						<div className="carousel owl-carousel">
 							{ images.map( image => (
-								<li className="carousel__item" key={ image.id || image.url }>
+								<div className="carousel__item" key={ image.id || image.url }>
 									<figure>
 										<img
 											className="carousel__image"
@@ -317,15 +328,15 @@ class BlockEdit extends Component {
 											<RichText.Content tagName="figcaption" value={ image.caption } />
 										) }
 									</figure>
-								</li>
+								</div>
 							) ) }
-						</ul>
+						</div>
 					) }
 					{ isSelected && (
 						<Fragment>
-							<ul className={ `carousel carousel--editor items-${ items }` }>
+							<div className={ `carousel carousel--editor items-${ items }` }>
 								{ images.map( ( image, index ) => (
-									<li className="carousel__item" key={ image.id || image.url }>
+									<div className="carousel__item" key={ image.id || image.url }>
 										<CarouselImage
 											url={ image.url }
 											alt={ image.alt }
@@ -336,9 +347,9 @@ class BlockEdit extends Component {
 											setAttributes={ attrs => this.setImageAttributes( index, attrs ) }
 											caption={ image.caption }
 										/>
-									</li>
+									</div>
 								) ) }
-							</ul>
+							</div>
 							<div className="carousel__add-item-button-container">
 								<FormFileUpload
 									multiple

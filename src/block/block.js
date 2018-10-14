@@ -53,7 +53,7 @@ registerBlockType( name, {
 			type: 'array',
 			default: [],
 			source: 'query',
-			selector: '.wp-block-gutenberg-block-carousel ul.carousel .carousel__item',
+			selector: '.wp-block-gutenberg-block-carousel .carousel .carousel__item',
 			query: {
 				url: {
 					source: 'attribute',
@@ -138,12 +138,12 @@ registerBlockType( name, {
 	save: ( { attributes: { images, align } } ) => {
 		return (
 			<div className="carousel-container" data-align={ align }>
-				<ul className="carousel">
+				<div className="carousel owl-carousel">
 					{ images.map( image => (
-						<li className="carousel__item" key={ image.id || image.url }>
+						<div className="carousel__item" key={ image.id || image.url }>
 							<figure>
 								<img
-									className="carousel__image"
+									className="carousel__image owl-lazy"
 									alt={ image.alt }
 									data-id={ image.id }
 									data-src={ image.url }
@@ -154,9 +154,9 @@ registerBlockType( name, {
 									<RichText.Content tagName="figcaption" value={ image.caption } />
 								) }
 							</figure>
-						</li>
+						</div>
 					) ) }
-				</ul>
+				</div>
 			</div>
 		);
 	},

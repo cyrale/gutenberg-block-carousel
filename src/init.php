@@ -21,11 +21,43 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 function gutenberg_block_carousel_block_assets() {
+	// Scripts.
+	wp_enqueue_script(
+		'owl.carousel',
+		'https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js',
+		[ 'jquery' ],
+		'2.3.4',
+		true
+	);
+
+	wp_enqueue_script(
+		'gutenberg-block-carousel-app-js',
+		plugins_url( 'dist/app.js', dirname( __FILE__ ) ),
+		[ 'owl.carousel', 'jquery' ],
+		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/app.js' ) ), 0, 8 ),
+		true
+	);
+
+
 	// Styles.
+	wp_enqueue_style(
+		'owl.carousel',
+		'https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css',
+		[],
+		'2.3.4'
+	);
+
+	wp_enqueue_style(
+		'owl.theme.default',
+		'https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.theme.default.min.css',
+		[],
+		'2.3.4'
+	);
+
 	wp_enqueue_style(
 		'gutenberg-block-carousel-style-css', // Handle.
 		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ), // Block style CSS.
-		[ 'wp-blocks' ], // Dependency to include the CSS after it.
+		[ 'wp-blocks', 'owl.carousel' ], // Dependency to include the CSS after it.
 		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' ) ), 0, 8 )
 	);
 }
@@ -45,10 +77,18 @@ add_action( 'enqueue_block_assets', 'gutenberg_block_carousel_block_assets' );
 function gutenberg_block_carousel_editor_assets() {
 	// Scripts.
 	wp_enqueue_script(
+		'owl.carousel',
+		'https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js',
+		[ 'jquery' ],
+		'2.3.4',
+		true
+	);
+
+	wp_enqueue_script(
 		'gutenberg-block-carousel-block-js', // Handle.
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
 		[ 'wp-blocks', 'wp-i18n', 'wp-element' ], // Dependencies, defined above.
-		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ) ), 0, 8),
+		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ) ), 0, 8 ),
 		true // Enqueue the script in the footer.
 	);
 
@@ -57,7 +97,7 @@ function gutenberg_block_carousel_editor_assets() {
 		'gutenberg-block-carousel-block-editor-css', // Handle.
 		plugins_url( 'dist/blocks.editor.build.css', dirname( __FILE__ ) ), // Block editor CSS.
 		[ 'wp-edit-blocks' ], // Dependency to include the CSS after it.
-		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' ) ), 0, 8)
+		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' ) ), 0, 8 )
 	);
 } // End function gutenberg_block_carousel_editor_assets().
 
