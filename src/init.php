@@ -188,7 +188,6 @@ add_filter( 'wp_kses_allowed_html', 'gutenberg_block_carousel_kses_allowed_html'
 function gutenberg_block_carousel_default_settings() {
 	$default_settings = [
 		'global' => [
-			'speed'           => 5000,
 			'autoplay'        => true,
 			'autoplayTimeout' => 5000,
 			'loop'            => true,

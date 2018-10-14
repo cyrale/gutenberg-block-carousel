@@ -22,7 +22,16 @@ const { compose } = wp.compose;
 const { withSelect } = wp.data;
 const { Component, Fragment } = wp.element;
 const { __ } = wp.i18n;
-const { IconButton, FormFileUpload, PanelBody, RangeControl, SelectControl, Toolbar, withNotices } = wp.components;
+const {
+	IconButton,
+	FormFileUpload,
+	PanelBody,
+	RangeControl,
+	SelectControl,
+	ToggleControl,
+	Toolbar,
+	withNotices,
+} = wp.components;
 const {
 	BlockAlignmentToolbar,
 	BlockControls,
@@ -231,37 +240,103 @@ class BlockEdit extends Component {
 		const inspector = (
 			<InspectorControls>
 				{ !! images.length && (
-					<PanelBody title={ __( 'Carousel Settings' ) }>
-						{ ! isEmpty( availableSizes ) && (
-							<Fragment>
-								<SelectControl
-									label={ __( 'Thumbnail Size' ) }
-									value={ thumbnailSize }
-									options={ availableSizes.map( sizeName => ( {
-										value: sizeName,
-										label: startCase( sizeName ),
-									} ) ) }
-									onChange={ this.setThumbnailSize }
-								/>
-								<SelectControl
-									label={ __( 'Lightbox Size' ) }
-									value={ lightboxSize }
-									options={ availableSizes.map( sizeName => ( {
-										value: sizeName,
-										label: startCase( sizeName ),
-									} ) ) }
-									onChange={ this.setLightboxSize }
-								/>
-							</Fragment>
-						) }
-						<RangeControl
-							label={ __( 'Items' ) }
-							value={ items }
-							onChange={ this.setItemsNumber }
-							min={ 1 }
-							max={ Math.min( MAX_ITEMS, images.length ) }
-						/>
-					</PanelBody>
+					<Fragment>
+						<PanelBody title={ __( 'Carousel Settings' ) }>
+							{ ! isEmpty( availableSizes ) && (
+								<Fragment>
+									<SelectControl
+										label={ __( 'Thumbnail Size' ) }
+										value={ thumbnailSize }
+										options={ availableSizes.map( sizeName => ( {
+											value: sizeName,
+											label: startCase( sizeName ),
+										} ) ) }
+										onChange={ this.setThumbnailSize }
+									/>
+									<SelectControl
+										label={ __( 'Lightbox Size' ) }
+										value={ lightboxSize }
+										options={ availableSizes.map( sizeName => ( {
+											value: sizeName,
+											label: startCase( sizeName ),
+										} ) ) }
+										onChange={ this.setLightboxSize }
+									/>
+								</Fragment>
+							) }
+							<ToggleControl label={ __( 'Autoplay' ) } />
+							<RangeControl label={ __( 'Autoplay Timeout' ) } min={ 100 } max={ 10000 } step={ 10 } value={ 5000 } />
+							<ToggleControl label={ __( 'Loop' ) } />
+							<ToggleControl label={ __( 'Navigation' ) } />
+							<ToggleControl label={ __( 'Dots' ) } />
+							<ToggleControl label={ __( 'Pagination' ) } />
+							<ToggleControl label={ __( 'Lightbox' ) } />
+						</PanelBody>
+						<PanelBody title={ __( 'Small screen' ) } initialOpen={ false } icon="smartphone">
+							<RangeControl
+								label={ __( 'Items' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+							<RangeControl
+								label={ __( 'Slide by' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+						</PanelBody>
+						<PanelBody title={ __( 'Medium screen' ) } initialOpen={ false } icon="tablet">
+							<RangeControl
+								label={ __( 'Items' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+							<RangeControl
+								label={ __( 'Slide by' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+						</PanelBody>
+						<PanelBody title={ __( 'Large screen' ) } initialOpen={ false } icon="laptop">
+							<RangeControl
+								label={ __( 'Items' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+							<RangeControl
+								label={ __( 'Slide by' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+						</PanelBody>
+						<PanelBody title={ __( 'XLarge screen' ) } initialOpen={ false } icon="desktop">
+							<RangeControl
+								label={ __( 'Items' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+							<RangeControl
+								label={ __( 'Slide by' ) }
+								value={ items }
+								onChange={ this.setItemsNumber }
+								min={ 1 }
+								max={ Math.min( MAX_ITEMS, images.length ) }
+							/>
+						</PanelBody>
+					</Fragment>
 				) }
 			</InspectorControls>
 		);
