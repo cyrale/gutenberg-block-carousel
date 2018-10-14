@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Use composer autoload.
-if ( ! class_exists( 'Puc_v4_Factory' ) ) {
+if ( ! class_exists( 'Puc_v4_Factory' ) && file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
