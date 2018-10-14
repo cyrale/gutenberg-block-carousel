@@ -65,6 +65,24 @@ function gutenberg_block_carousel_editor_assets() {
 add_action( 'enqueue_block_editor_assets', 'gutenberg_block_carousel_editor_assets' );
 
 /**
+ * Add the current block in the white list.
+ *
+ * @param array $blocks White listed blocks.
+ *
+ * @return array New list with the current block inside.
+ */
+function gutenberg_block_container_default_blocks( $blocks ) {
+	if ( ! in_array( 'gutenberg-block/carousel', $blocks, true ) ) {
+		$blocks[] = 'gutenberg-block/carousel';
+	}
+
+	return $blocks;
+}
+
+// Hook: Default blocks.
+add_filter( 'gutenberg_basics_default_blocks', 'gutenberg_block_container_default_blocks' );
+
+/**
  * Define image sizes.
  */
 function gutenberg_block_carousel_define_image_sizes() {
