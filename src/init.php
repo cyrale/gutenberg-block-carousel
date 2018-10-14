@@ -71,7 +71,7 @@ add_action( 'enqueue_block_editor_assets', 'gutenberg_block_carousel_editor_asse
  *
  * @return array New list with the current block inside.
  */
-function gutenberg_block_container_default_blocks( $blocks ) {
+function gutenberg_block_carousel_default_blocks( $blocks ) {
 	if ( ! in_array( 'gutenberg-block/carousel', $blocks, true ) ) {
 		$blocks[] = 'gutenberg-block/carousel';
 	}
@@ -80,7 +80,7 @@ function gutenberg_block_container_default_blocks( $blocks ) {
 }
 
 // Hook: Default blocks.
-add_filter( 'gutenberg_basics_default_blocks', 'gutenberg_block_container_default_blocks' );
+add_filter( 'gutenberg_basics_default_blocks', 'gutenberg_block_carousel_default_blocks' );
 
 /**
  * Define image sizes.
