@@ -32,9 +32,9 @@ function gutenberg_block_carousel_block_assets() {
 
 	wp_enqueue_script(
 		'gutenberg-block-carousel-app-js',
-		plugins_url( 'dist/app.js', dirname( __FILE__ ) ),
+		plugins_url( 'dist/app.min.js', dirname( __FILE__ ) ),
 		[ 'owl.carousel', 'jquery' ],
-		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/app.js' ) ), 0, 8 ),
+		substr( sha1( filemtime( plugin_dir_path( __DIR__ ) . 'dist/app.min.js' ) ), 0, 8 ),
 		true
 	);
 
