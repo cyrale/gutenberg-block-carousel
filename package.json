@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cgb-scripts start",
-    "build": "cgb-scripts build",
+    "build": "cgb-scripts build && npx uglifyjs dist/app.js --compress --mangle --output dist/app.min.js",
     "eject": "cgb-scripts eject",
     "fixjs": "npx prettier --write src/**/*.js && npx eslint --fix src/**/*.js"
   },
@@ -12,6 +12,7 @@
     "src/**/*.js": [
       "prettier --write",
       "eslint --fix",
+      "npm run build",
       "git add"
     ]
   },
@@ -23,7 +24,8 @@
     "husky": "1.1.2",
     "lint-staged": "7.3.0",
     "lodash": "^4.17.11",
-    "prettier": "1.14.3"
+    "prettier": "1.14.3",
+    "uglify-js": "^3.4.9"
   },
   "husky": {
     "hooks": {
