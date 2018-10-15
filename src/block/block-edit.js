@@ -11,12 +11,11 @@ import set from 'lodash/set';
 import startCase from 'lodash/startCase';
 import uniq from 'lodash/uniq';
 
-import hash from 'object-hash';
-
 /**
  * Internal dependencies
  */
 import CarouselImage from './carousel-image';
+import withSettings from './with-settings';
 
 /**
  * WordPress dependencies
@@ -113,12 +112,8 @@ export function defaultItemsNumber( attributes ) {
 	return Math.min( 3, attributes.images.length );
 }
 
-export function currentSettings( attributes ) {
-	return attributes.settings || window.gutenbergBlockCarouselDefaultSettings;
-}
-
 class BlockEdit extends Component {
-	constructor( props ) {
+	constructor() {
 		super( ...arguments );
 
 		this.onSelectImage = this.onSelectImage.bind( this );
@@ -134,10 +129,8 @@ class BlockEdit extends Component {
 
 		this.state = {
 			selectedImage: null,
-			thumbnailSize: props.thumbnailSize,
-			lightboxSize: props.lightboxSize,
 			carouselInitialized: false,
-			settingsHash: '',
+			settings: {},
 		};
 	}
 
@@ -176,23 +169,23 @@ class BlockEdit extends Component {
 
 	setThumbnailSize( value ) {
 		this.props.setAttributes( { thumbnailSize: value } );
-		this.setState( { thumbnailSize: value, updateSize: true } );
+		this.setState( { updateSize: true } );
 	}
 
 	setLightboxSize( value ) {
 		this.props.setAttributes( { lightboxSize: value } );
-		this.setState( { lightboxSize: value, updateSize: true } );
+		this.setState( { updateSize: true } );
 	}
 
 	updateSettings( path, value ) {
 		const {
-			attributes: { settings = currentSettings( this.props.attributes ) },
+			attributes: { settings },
 		} = this.props;
 		const newSettings = set( settings, path, value );
 
 		this.props.setAttributes( { settings: newSettings } );
 		this.setState( {
-			settingsHash: hash( newSettings, { algorithm: 'sha1' } ),
+			settings: newSettings,
 		} );
 	}
 
@@ -260,6 +253,18 @@ class BlockEdit extends Component {
 			setAttributes,
 		} = this.props;
 
+		// Set default settings.
+		if ( ! this.props.attributes.settings && this.props.settings ) {
+			setAttributes( {
+				settings: this.props.settings,
+			} );
+
+			this.setState( {
+				settings: this.props.settings,
+			} );
+		}
+
+		// Update image sizes.
 		if ( this.state.updateSize || ( ! isSelected && prevProps.isSelected ) ) {
 			setAttributes( {
 				images: images.map( image => {
@@ -312,14 +317,15 @@ class BlockEdit extends Component {
 			thumbnailSize,
 			lightboxSize,
 			align,
-			settings = currentSettings( attributes ),
+			settings,
 		} = attributes;
 
 		const availableSizes = this.getAvailableSizes();
 
 		const inspector = (
 			<InspectorControls>
-				{ !! images.length && (
+				{ settings &&
+					!! images.length && (
 					<Fragment>
 						<PanelBody title={ __( 'Carousel Settings' ) }>
 							{ ! isEmpty( availableSizes ) && (
@@ -358,7 +364,9 @@ class BlockEdit extends Component {
 									step={ 10 }
 									beforeIcon="clock"
 									value={ settings.global.autoplayTimeout }
-									onChange={ newValue => this.updateSettings( [ 'global', 'autoplayTimeout' ], newValue ) }
+									onChange={ newValue =>
+										this.updateSettings( [ 'global', 'autoplayTimeout' ], newValue )
+									}
 								/>
 							) }
 							<ToggleControl
@@ -599,6 +607,7 @@ class BlockEdit extends Component {
 }
 
 export default compose( [
+	withSettings,
 	withSelect( ( select, props ) => {
 		const { getMedia } = select( 'core' );
 
