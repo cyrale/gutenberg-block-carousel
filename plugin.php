@@ -3,7 +3,7 @@
  * Plugin Name: Gutenberg Block - Carousel
  * Plugin URI:  https://github.com/cyrale/gutenberg-block-carousel
  * Description:
- * Version:     1.0.0
+ * Version:     0.1.0
  * Author:      Cyrale
  * Author URI:  https://github.com/cyrale
  * Donate link: https://github.com/cyrale/gutenberg-block-carousel
