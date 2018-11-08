@@ -24,16 +24,7 @@ const { compose } = wp.compose;
 const { withSelect } = wp.data;
 const { Component, Fragment } = wp.element;
 const { __ } = wp.i18n;
-const {
-	IconButton,
-	FormFileUpload,
-	PanelBody,
-	RangeControl,
-	SelectControl,
-	ToggleControl,
-	Toolbar,
-	withNotices,
-} = wp.components;
+const { IconButton, FormFileUpload, PanelBody, SelectControl, Toolbar, withNotices } = wp.components;
 const {
 	BlockAlignmentToolbar,
 	BlockControls,
@@ -43,70 +34,6 @@ const {
 	RichText,
 	mediaUpload,
 } = wp.editor;
-
-const MAX_ITEMS = 8;
-
-const animations = {
-	'Bouncing Entrances': [ 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp' ],
-	'Bouncing Exits': [ 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp' ],
-	'Fading Entrances': [
-		'fadeIn',
-		'fadeInDown',
-		'fadeInDownBig',
-		'fadeInLeft',
-		'fadeInLeftBig',
-		'fadeInRight',
-		'fadeInRightBig',
-		'fadeInUp',
-		'fadeInUpBig',
-	],
-	'Fading Exits': [
-		'fadeOut',
-		'fadeOutDown',
-		'fadeOutDownBig',
-		'fadeOutLeft',
-		'fadeOutLeftBig',
-		'fadeOutRight',
-		'fadeOutRightBig',
-		'fadeOutUp',
-		'fadeOutUpBig',
-	],
-	Flippers: [ 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY' ],
-	Lightspeed: [ 'lightSpeedIn', 'lightSpeedOut' ],
-	'Rotating Entrances': [ 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight' ],
-	'Rotating Exits': [ 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight' ],
-	'Sliding Entrances': [ 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight' ],
-	'Sliding Exits': [ 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight' ],
-	'Zoom Entrances': [ 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp' ],
-	'Zoom Exits': [ 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp' ],
-};
-
-function animationsInOut( direction ) {
-	const anims = [
-		{
-			label: '',
-			value: '',
-		},
-	];
-
-	const notDirection = direction === 'In' ? 'Out' : 'In';
-
-	Object.keys( animations ).forEach( key => {
-		animations[ key ].forEach( animation => {
-			if (
-				animation.indexOf( direction ) >= 0 ||
-				( animation.indexOf( direction ) === -1 && animation.indexOf( notDirection ) === -1 )
-			) {
-				anims.push( {
-					label: animation,
-					value: animation,
-				} );
-			}
-		} );
-	} );
-
-	return anims;
-}
 
 export function defaultItemsNumber( attributes ) {
 	return Math.min( 3, attributes.images.length );
@@ -311,14 +238,7 @@ class BlockEdit extends Component {
 
 	render() {
 		const { attributes, className, isSelected, setAttributes, noticeOperations, noticeUI } = this.props;
-		const {
-			images,
-			items = defaultItemsNumber( attributes ),
-			thumbnailSize,
-			lightboxSize,
-			align,
-			settings,
-		} = attributes;
+		const { images, items = defaultItemsNumber( attributes ), thumbnailSize, align, settings } = attributes;
 
 		const availableSizes = this.getAvailableSizes();
 
@@ -339,152 +259,6 @@ class BlockEdit extends Component {
 									onChange={ this.setThumbnailSize }
 								/>
 							) }
-							<SelectControl
-								label={ __( 'Animate Out' ) }
-								value={ settings.global.animateOut }
-								options={ animationsInOut( 'Out' ) }
-								onChange={ newValue => this.updateSettings( [ 'global', 'animateOut' ], newValue ) }
-							/>
-							<SelectControl
-								label={ __( 'Animate In' ) }
-								value={ settings.global.animateIn }
-								options={ animationsInOut( 'In' ) }
-								onChange={ newValue => this.updateSettings( [ 'global', 'animateIn' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Autoplay' ) }
-								checked={ !! settings.global.autoplay }
-								onChange={ newValue => this.updateSettings( [ 'global', 'autoplay' ], newValue ) }
-							/>
-							{ !! settings.global.autoplay && (
-								<RangeControl
-									label={ __( 'Autoplay Timeout' ) }
-									min={ 100 }
-									max={ 10000 }
-									step={ 10 }
-									beforeIcon="clock"
-									value={ settings.global.autoplayTimeout }
-									onChange={ newValue =>
-										this.updateSettings( [ 'global', 'autoplayTimeout' ], newValue )
-									}
-								/>
-							) }
-							<ToggleControl
-								label={ __( 'Infinite Loop' ) }
-								checked={ !! settings.global.loop }
-								onChange={ newValue => this.updateSettings( [ 'global', 'loop' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Display Navigation' ) }
-								checked={ !! settings.global.nav }
-								onChange={ newValue => this.updateSettings( [ 'global', 'nav' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Dispay Dots' ) }
-								checked={ !! settings.global.dots }
-								onChange={ newValue => this.updateSettings( [ 'global', 'dots' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Display Pagination' ) }
-								checked={ !! settings.global.pagination }
-								onChange={ newValue => this.updateSettings( [ 'global', 'pagination' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Display Caption' ) }
-								checked={ !! settings.global.caption }
-								onChange={ newValue => this.updateSettings( [ 'global', 'caption' ], newValue ) }
-							/>
-							<ToggleControl
-								label={ __( 'Use Lightbox' ) }
-								checked={ !! settings.global.lightbox }
-								onChange={ newValue => this.updateSettings( [ 'global', 'lightbox' ], newValue ) }
-							/>
-							{ !! settings.global.lightbox && (
-								<Fragment>
-									{ ! isEmpty( availableSizes ) && (
-										<SelectControl
-											label={ __( 'Lightbox Size' ) }
-											value={ lightboxSize }
-											options={ availableSizes.map( sizeName => ( {
-												value: sizeName,
-												label: startCase( sizeName ),
-											} ) ) }
-											onChange={ this.setLightboxSize }
-										/>
-									) }
-									<ToggleControl
-										label={ __( 'Display Caption in Lightbox' ) }
-										checked={ !! settings.global.lightboxCaption }
-										onChange={ newValue =>
-											this.updateSettings( [ 'global', 'lightboxCaption' ], newValue )
-										}
-									/>
-								</Fragment>
-							) }
-						</PanelBody>
-						<PanelBody title={ __( 'Small screen' ) } initialOpen={ false } icon="smartphone">
-							<RangeControl
-								label={ __( 'Items' ) }
-								value={ settings.small.items }
-								onChange={ newValue => this.updateSettings( [ 'small', 'items' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-							<RangeControl
-								label={ __( 'Slide by' ) }
-								value={ settings.small.slideBy }
-								onChange={ newValue => this.updateSettings( [ 'small', 'slideBy' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-						</PanelBody>
-						<PanelBody title={ __( 'Medium screen' ) } initialOpen={ false } icon="tablet">
-							<RangeControl
-								label={ __( 'Items' ) }
-								value={ settings.medium.items }
-								onChange={ newValue => this.updateSettings( [ 'medium', 'items' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-							<RangeControl
-								label={ __( 'Slide by' ) }
-								value={ settings.medium.slideBy }
-								onChange={ newValue => this.updateSettings( [ 'medium', 'slideBy' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-						</PanelBody>
-						<PanelBody title={ __( 'Large screen' ) } initialOpen={ false } icon="laptop">
-							<RangeControl
-								label={ __( 'Items' ) }
-								value={ settings.large.items }
-								onChange={ newValue => this.updateSettings( [ 'large', 'items' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-							<RangeControl
-								label={ __( 'Slide by' ) }
-								value={ settings.large.items }
-								onChange={ newValue => this.updateSettings( [ 'large', 'slideBy' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-						</PanelBody>
-						<PanelBody title={ __( 'XLarge screen' ) } initialOpen={ false } icon="desktop">
-							<RangeControl
-								label={ __( 'Items' ) }
-								value={ settings.xlarge.items }
-								onChange={ newValue => this.updateSettings( [ 'xlarge', 'items' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
-							<RangeControl
-								label={ __( 'Slide by' ) }
-								value={ settings.xlarge.slideBy }
-								onChange={ newValue => this.updateSettings( [ 'xlarge', 'slideBy' ], newValue ) }
-								min={ 1 }
-								max={ Math.min( MAX_ITEMS, images.length ) }
-							/>
 						</PanelBody>
 					</Fragment>
 				) }
